@@ -10,7 +10,7 @@ class CartScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final cart = Provider.of<Cart>(context);
     return Scaffold(
-      appBar: AppBar(title: Text('Your Cart')),
+      appBar: AppBar(title: const Text('Your Cart')),
       body: Column(
         children: [
           Card(
@@ -28,6 +28,7 @@ class CartScreen extends StatelessWidget {
                     label: Text('\$${cart.totalAmount}'),
                     backgroundColor: Colors.teal[100],
                   ),
+                  // ignore: deprecated_member_use
                   FlatButton(
                     onPressed: () {},
                     child: const Text('ORDER NOW'),

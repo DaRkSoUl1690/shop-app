@@ -8,7 +8,7 @@ class ProductDetailScreen extends StatelessWidget {
   // const ProductDetailScreen({Key? key, required this.title}) : super(key: key);
   static const routeName = '/lib/screens/product_detail_screen.dart';
 
-  ProductDetailScreen({Key? key}) : super(key: key);
+  const ProductDetailScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final productId = ModalRoute.of(context)!.settings.arguments as String;

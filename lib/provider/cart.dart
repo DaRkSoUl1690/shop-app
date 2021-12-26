@@ -13,7 +13,7 @@ class Cart with ChangeNotifier {
   get totalAmount {
     var total = 0.0;
     _items.forEach((key, cartItem) {
-      total += cartItem.price + cartItem.quantity;
+      total += cartItem.price * cartItem.quantity;
     });
     return total;
   }
@@ -26,7 +26,7 @@ class Cart with ChangeNotifier {
         (value) => CartItem(
             id: value.id,
             price: value.price,
-            quantity: value.quantity + 1,
+            quantity: value.quantity+1,
             title: value.title),
       );
     } else {

@@ -7,7 +7,7 @@ class ProductsProvider with ChangeNotifier {
         id: 'p1',
         description: 'Apple iPhone 12th generation',
         title: 'iPhone 12 Pro',
-        price: 999,
+        price: 9,
         imageUrl:
             'https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-12-pro-blue-hero?wid=940&hei=1112&fmt=png-alpha&qlt=80&.v=1604021661000',
         isFavorite: false),
@@ -15,7 +15,7 @@ class ProductsProvider with ChangeNotifier {
         id: 'p2',
         description: 'Apple iPhone 12th generation',
         title: 'Apple phone hai',
-        price: 999,
+        price: 9,
         imageUrl:
             'https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-12-pro-blue-hero?wid=940&hei=1112&fmt=png-alpha&qlt=80&.v=1604021661000',
         isFavorite: false),
@@ -23,7 +23,7 @@ class ProductsProvider with ChangeNotifier {
         id: 'p3',
         description: 'Apple iPhone 12th generation',
         title: 'iPhone 12 Pro',
-        price: 999,
+        price: 9,
         imageUrl:
             'https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-12-pro-blue-hero?wid=940&hei=1112&fmt=png-alpha&qlt=80&.v=1604021661000',
         isFavorite: false),

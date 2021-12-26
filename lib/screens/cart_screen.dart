@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_app/provider/cart.dart';
+import 'package:shop_app/widgets/cart_item.dart';
 
 class CartScreen extends StatelessWidget {
-  static const routeName = '/lib/screens/cart_screen.dart';
   const CartScreen({Key? key}) : super(key: key);
+
+  static const routeName = '/lib/screens/cart_screen.dart';
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +30,7 @@ class CartScreen extends StatelessWidget {
                     label: Text('\$${cart.totalAmount}'),
                     backgroundColor: Colors.teal[100],
                   ),
+
                   // ignore: deprecated_member_use
                   FlatButton(
                     onPressed: () {},
@@ -37,8 +40,24 @@ class CartScreen extends StatelessWidget {
               ),
             ),
           ),
+          const SizedBox(height: 10),
+          Expanded(
+            child: ListView.builder(
+              itemCount: cart.items.length,
+              itemBuilder: (context, i) => CartItemScreen(
+                id: cart.items.values.toList()[i].id,
+                price: cart.items.values.toList()[i].price,
+                quantity: cart.items.values.toList()[i].quantity,
+                title: cart.items.values.toList()[i].title,
+              ),
+            ),
+          ),
         ],
       ),
     );
   }
 }
+
+
+
+//  CardItemScreen(cart.items[i].id , cart.items[i].price, cart.items[i].quantity, cart.items[i].title)

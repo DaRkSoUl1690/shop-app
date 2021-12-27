@@ -1,9 +1,9 @@
 // ignore_for_file: constant_identifier_names
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_app/provider/cart.dart';
 import 'package:shop_app/screens/cart_screen.dart';
+import 'package:shop_app/widgets/app_drawer.dart';
 import 'package:shop_app/widgets/badge.dart';
 import 'package:shop_app/widgets/grid_product.dart';
 
@@ -61,6 +61,7 @@ class _ProductScreenState extends State<ProductScreen> {
           ),
         ],
       ),
+      drawer: const AppDrawer(),
       body: ProductGrid(
         _showfavonly,
       ),

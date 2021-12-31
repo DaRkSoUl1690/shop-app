@@ -6,7 +6,8 @@ import 'package:shop_app/widgets/product_item.dart';
 
 class ProductGrid extends StatelessWidget {
   final bool showfavs;
-  ProductGrid(this.showfavs);
+  // ignore: use_key_in_widget_constructors
+  const ProductGrid(this.showfavs);
 
   @override
   Widget build(BuildContext context) {

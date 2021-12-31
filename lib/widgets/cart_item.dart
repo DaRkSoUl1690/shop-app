@@ -38,8 +38,9 @@ class CartItemScreen extends StatelessWidget {
             actions: [
               TextButton(
                 style: TextButton.styleFrom(
+                  primary: Colors.grey,
                   backgroundColor: Colors.white,
-                  padding: EdgeInsets.all(0),
+                  padding: const EdgeInsets.all(0),
                 ),
                 child: const Text(
                   'No',
@@ -49,8 +50,16 @@ class CartItemScreen extends StatelessWidget {
                   Navigator.of(ctx).pop(false);
                 },
               ),
-              FlatButton(
-                child: const Text('Yes'),
+              TextButton(
+                style: TextButton.styleFrom(
+                  primary: Colors.grey,
+                  backgroundColor: Colors.white,
+                  padding: const EdgeInsets.all(0),
+                ),
+                child: const Text(
+                  'Yes',
+                  style: TextStyle(color: Colors.black),
+                ),
                 onPressed: () {
                   Navigator.of(ctx).pop(true);
                 },

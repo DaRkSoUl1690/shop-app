@@ -30,18 +30,25 @@ class ProductsProvider with ChangeNotifier {
   ];
 
   //modified by me
-   List<Product> get items {
+  List<Product> get items {
     return [..._items];
   }
-  
+
   List<Product> get favorite {
     return _items.where((probItem) => probItem.isFavorite).toList();
   }
 
   Product findById(String id) => _items.firstWhere((prod) => prod.id == id);
 
-  void addProduct() {
-    //_items.add(value);
+  void addProduct(Product product) {
+    final newProduct = Product(
+        id: product.id,
+        description: product.description,
+        price: product.price,
+        title: product.title,
+        isFavorite: product.isFavorite,
+        imageUrl: product.imageUrl);
+    _items.add(newProduct);
     notifyListeners();
   }
 }

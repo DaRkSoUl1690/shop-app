@@ -43,32 +43,38 @@ class _EditProductScreenState extends State<EditProductScreen> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      final productId = ModalRoute.of(context)!.settings.arguments as String;
-      _editedProduct = Provider.of<ProductsProvider>(context, listen: false)
-          .findById(productId);
-
-      _initValue = {
-        'title': _editedProduct.title,
-        'description': _editedProduct.description,
-        'imageUrl': '',
-        'price': _editedProduct.price.toString(),
-        // 'isFavorite': false
-      };
-      _imageUrlController.text = _editedProduct.imageUrl;
+      final productId = ModalRoute.of(context)!.settings.arguments == null
+          ? 'NULL'
+          : ModalRoute.of(context)!.settings.arguments as String;
+      if (productId != 'NULL') {
+        _editedProduct = Provider.of<ProductsProvider>(context, listen: false)
+            .findById(productId);
+        print(_editedProduct.id);
+        _initValue = {
+          'title': _editedProduct.title,
+          'description': _editedProduct.description,
+          'imageUrl': '',
+          'price': _editedProduct.price.toString(),
+          // 'isFavorite': false
+        };
+        _imageUrlController.text = _editedProduct.imageUrl;
+      }else{
+        print("id not assigned");
+      }
     }
     _isInit = false;
     super.didChangeDependencies();
   }
 
-  @override
-  void dispose() {
-    _priceFocusNode.dispose();
-    _descFocusNode.dispose();
-    _imageUrlController.dispose();
-    _imageFocusNode.dispose();
-    _imageFocusNode.removeListener(_updateImageUrl);
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   _priceFocusNode.dispose();
+  //   _descFocusNode.dispose();
+  //   // _imageFocusNode.dispose();
+  //   _imageFocusNode.removeListener(_updateImageUrl);
+
+  //   super.dispose();
+  // }
 
   void _updateImageUrl() {
     if (!_imageFocusNode.hasFocus) {
@@ -82,7 +88,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
       return;
     }
     _form.currentState!.save();
-    if (_editedProduct.id != null) {
+    if (_editedProduct.id != '') {
       Provider.of<ProductsProvider>(context, listen: false)
           .updateProduct(_editedProduct.id, _editedProduct);
     } else {

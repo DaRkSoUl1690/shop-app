@@ -1,19 +1,8 @@
+import 'dart:convert';
 import 'package:flutter/foundation.dart';
+import 'package:shop_app/models/orderitem.dart';
 import 'package:shop_app/provider/cart.dart';
-
-class OrderItems {
-  final String id;
-  final double amount;
-  final List<CartItem> products;
-  final DateTime dateTime;
-  OrderItems({
-    required this.id,
-    required this.amount,
-    required this.products,
-    required this.dateTime,
-  });
-}
-
+import 'package:http/http.dart' as http;
 
 class Orders with ChangeNotifier {
   final List<OrderItems> _orders = [];
@@ -22,16 +11,35 @@ class Orders with ChangeNotifier {
     return [..._orders];
   }
 
-  void addOrder(List<CartItem> cartproducts, double total) {
-    _orders.insert(
-      0,
-      OrderItems(
-        id: DateTime.now().toString(),
-        amount: total,
-        products: cartproducts,
-        dateTime: DateTime.now(),
-      ),
-    );
-    notifyListeners();
+  Future<void> addOrder(List<CartItem> cartproducts, double total) async {
+    const url = 'https://shopapp-347e8-default-rtdb.firebaseio.com/orders.json';
+    final timeStamp = DateTime.now();
+    try {
+      final response = await http.post(Uri.parse(url),
+          body: json.encode({
+            'amount': total,
+            'products': cartproducts
+                .map((cp) => {
+                      'id': cp.id,
+                      'title': cp.title,
+                      'quantity': cp.quantity,
+                      'price': cp.price,
+                    })
+                .toList(),
+            'dateTime': timeStamp.toString(),
+          }));
+      print(json.decode(response.body));
+
+      _orders.insert(
+        0,
+        OrderItems(
+          id: json.decode(response.body)['name'],
+          amount: total,
+          products: cartproducts,
+          dateTime: timeStamp,
+        ),
+      );
+      notifyListeners();
+    } catch (error) {}
   }
 }

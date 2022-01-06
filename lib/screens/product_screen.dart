@@ -23,7 +23,7 @@ class _ProductScreenState extends State<ProductScreen> {
   var _loading = false;
   @override
   void initState() {
-    // TODO: implement initState
+  
     super.initState();
   }
 

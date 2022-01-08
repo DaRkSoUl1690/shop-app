@@ -50,7 +50,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
       if (productId != 'NULL') {
         _editedProduct = Provider.of<ProductsProvider>(context, listen: false)
             .findById(productId);
-        print(_editedProduct.id);
+
         _initValue = {
           'title': _editedProduct.title,
           'description': _editedProduct.description,
@@ -59,23 +59,21 @@ class _EditProductScreenState extends State<EditProductScreen> {
           // 'isFavorite': false
         };
         _imageUrlController.text = _editedProduct.imageUrl;
-      } else {
-        print("id not assigned");
       }
     }
     _isInit = false;
     super.didChangeDependencies();
   }
 
-  // @override
-  // void dispose() {
-  //   _priceFocusNode.dispose();
-  //   _descFocusNode.dispose();
-  //   // _imageFocusNode.dispose();
-  //   _imageFocusNode.removeListener(_updateImageUrl);
+  @override
+  void dispose() {
+    _priceFocusNode.dispose();
+    _descFocusNode.dispose();
+    // _imageFocusNode.dispose();
+    _imageFocusNode.removeListener(_updateImageUrl);
 
-  //   super.dispose();
-  // }
+    super.dispose();
+  }
 
   void _updateImageUrl() {
     if (!_imageFocusNode.hasFocus) {
@@ -93,7 +91,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
       _loading = true;
     });
     if (_editedProduct.id != '') {
-     await Provider.of<ProductsProvider>(context, listen: false)
+      await Provider.of<ProductsProvider>(context, listen: false)
           .updateProduct(_editedProduct.id, _editedProduct);
       setState(() {
         _loading = true;

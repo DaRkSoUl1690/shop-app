@@ -78,15 +78,17 @@ class _OrderNowState extends State<OrderNow> {
                 setState(() {
                   _loading = true;
                 });
-              await  Provider.of<Orders>(context, listen: false).addOrder(
-                    widget.cart.items.values.toList(), widget.cart.totalAmount)
-                  .then((_) {
-                setState(() {
-                  _loading = false;
+                await Provider.of<Orders>(context, listen: false)
+                    .addOrder(widget.cart.items.values.toList(),
+                        widget.cart.totalAmount)
+                    .then((_) {
+                  setState(() {
+                    _loading = false;
+                  });
                 });
-                });
-
-              } catch (error) {}
+              } catch (error) {
+                rethrow;
+              }
               widget.cart.clear();
             },
       child: _loading

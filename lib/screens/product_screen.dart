@@ -20,30 +20,27 @@ class ProductScreen extends StatefulWidget {
 class _ProductScreenState extends State<ProductScreen> {
   bool _showfavonly = false;
   var _isInit = true;
-  var _loading = false;
+  var _loading = true;
   @override
   void initState() {
-  
-    super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
     if (_isInit) {
       setState(() {
         _loading = true;
       });
-      Provider.of<ProductsProvider>(context)
-          .fetchAndSetProducts()
-          .then((_) {
-             setState(() {
-          _loading = false;
-        });
-          });
-     }
+      Provider.of<ProductsProvider>(context,listen: false).fetchAndSetProducts();
+      setState(() {
+        _loading = false;
+      });
+    }
     _isInit = false;
-    super.didChangeDependencies();
+    super.initState();
   }
+
+  // @override
+  // void didChangeDependencies() {
+    
+  //   super.didChangeDependencies();
+  // }
 
   @override
   Widget build(BuildContext context) {

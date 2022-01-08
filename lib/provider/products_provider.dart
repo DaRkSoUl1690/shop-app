@@ -14,8 +14,12 @@ class ProductsProvider with ChangeNotifier {
     try {
       final response = await http.get(Uri.parse(url));
       // print(json.decode(response.body));
-      final extractedData = json.decode(response.body) as Map<String, dynamic>;
+      final extractedData = json.decode(response.body) as Map<String, dynamic>?;
       final List<Product> loadedProduct = [];
+      if(extractedData==null)
+      {
+        return;
+      }
       extractedData.forEach(
         (key, value) {
           loadedProduct.add(
@@ -32,7 +36,7 @@ class ProductsProvider with ChangeNotifier {
       _items = loadedProduct;
       notifyListeners();
     } catch (error) {
-      (int)rethrow;
+    
     }
   }
 

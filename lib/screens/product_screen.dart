@@ -23,24 +23,23 @@ class _ProductScreenState extends State<ProductScreen> {
   var _loading = true;
   @override
   void initState() {
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
     if (_isInit) {
       setState(() {
         _loading = true;
       });
-      Provider.of<ProductsProvider>(context,listen: false).fetchAndSetProducts();
+      Provider.of<ProductsProvider>(context).fetchAndSetProducts();
       setState(() {
         _loading = false;
       });
     }
     _isInit = false;
-    super.initState();
+    super.didChangeDependencies();
   }
-
-  // @override
-  // void didChangeDependencies() {
-    
-  //   super.didChangeDependencies();
-  // }
 
   @override
   Widget build(BuildContext context) {

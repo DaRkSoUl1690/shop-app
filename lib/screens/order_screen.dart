@@ -16,15 +16,16 @@ class _OrderScreenState extends State<OrderScreen> {
   var _loading = false;
   @override
   void initState() {
-    setState(() {
+    // setState(() {
       _loading = true;
-    });
-    Provider.of<Orders>(context, listen: false).fetchAndSetOrders().then((_) {
+      
+    // });
+    Provider.of<Orders>(context,listen: false).fetchAndSetOrders().then((_) {
       setState(() {
         _loading = false;
       });
     });
-   
+
     super.initState();
   }
 

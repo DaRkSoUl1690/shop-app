@@ -6,6 +6,7 @@ import 'package:shop_app/widgets/order_item.dart';
 
 class OrderScreen extends StatefulWidget {
   static const routeName = '/lib/screens/order_screen.dart';
+
   const OrderScreen({Key? key}) : super(key: key);
 
   @override
@@ -13,40 +14,48 @@ class OrderScreen extends StatefulWidget {
 }
 
 class _OrderScreenState extends State<OrderScreen> {
-  var _loading = false;
+  late Future _ordersFuture;
+  Future _obtainOrdersFuture() {
+    return Provider.of<Orders>(context, listen: false).fetchAndSetOrders();
+  }
+
   @override
   void initState() {
-    // setState(() {
-      _loading = true;
-      
-    // });
-    Provider.of<Orders>(context,listen: false).fetchAndSetOrders().then((_) {
-      setState(() {
-        _loading = false;
-      });
-    });
-
+    _ordersFuture = _obtainOrdersFuture();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final orderData = Provider.of<Orders>(context);
+    // final orderData = Provider.of<Orders>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Your Orders'),
       ),
       drawer: const AppDrawer(),
-      body: _loading
-          ? const Center(
+      body: FutureBuilder(
+        future: _ordersFuture,
+        builder: (ctx, dataSnapshot) {
+          if (dataSnapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
               child: CircularProgressIndicator(),
-            )
-          : ListView.builder(
-              itemCount: orderData.orders.length,
-              itemBuilder: (ctx, i) => OrderItem(
-                order: orderData.orders[i],
-              ),
-            ),
+            );
+          } else {
+            if (dataSnapshot.error != null) {
+              return const Text("error occured");
+            } else {
+              return Consumer<Orders>(
+                builder: (ctx, orderData, child) => ListView.builder(
+                  itemCount: orderData.orders.length,
+                  itemBuilder: (ctx, i) => OrderItem(
+                    order: orderData.orders[i],
+                  ),
+                ),
+              );
+            }
+          }
+        },
+      ),
     );
   }
 }

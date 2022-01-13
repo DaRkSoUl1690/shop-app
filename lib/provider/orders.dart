@@ -6,13 +6,16 @@ import 'package:http/http.dart' as http;
 
 class Orders with ChangeNotifier {
   List<OrderItems> _orders = [];
+  late final String authToken;
+ 
+  Orders(this.authToken,this._orders);
 
   get orders {
     return [..._orders];
   }
 
   Future<void> fetchAndSetOrders() async {
-    const url = 'https://shopapp-347e8-default-rtdb.firebaseio.com/orders.json';
+    final url = 'https://shopapp-347e8-default-rtdb.firebaseio.com/orders.json?auth=$authToken';
     final response = await http.get(Uri.parse(url));
     var extractedData = json.decode(response.body) as Map<String, dynamic>?;
     if (extractedData == null) {
@@ -46,7 +49,7 @@ class Orders with ChangeNotifier {
   }
 
   Future<void> addOrder(List<CartItem> cartproducts, double total) async {
-    const url = 'https://shopapp-347e8-default-rtdb.firebaseio.com/orders.json';
+    final url = 'https://shopapp-347e8-default-rtdb.firebaseio.com/orders.json?auth=$authToken';
     final timeStamp = DateTime.now();
     try {
       final response = await http.post(Uri.parse(url),

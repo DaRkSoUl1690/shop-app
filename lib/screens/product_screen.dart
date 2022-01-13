@@ -11,6 +11,7 @@ import 'package:shop_app/widgets/grid_product.dart';
 enum FilterOptions { Favorites, All }
 
 class ProductScreen extends StatefulWidget {
+  
   const ProductScreen({Key? key}) : super(key: key);
 
   @override

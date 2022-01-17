@@ -13,9 +13,11 @@ class ProductsProvider with ChangeNotifier {
 
   ProductsProvider(this.authToken, this.userId, this._items);
 
-  Future<void> fetchAndSetProducts() async {
+  Future<void> fetchAndSetProducts([bool filterByUser = false]) async {
+    final filterString = filterByUser ? 'orderBy="creatorId"&equalTo="$userId"' : '';
+
     var url =
-        'https://shopapp-347e8-default-rtdb.firebaseio.com/products.json?auth=$authToken';
+        'https://shopapp-347e8-default-rtdb.firebaseio.com/products.json?auth=$authToken&$filterString';
     try {
       final response = await http.get(Uri.parse(url));
       // print(json.decode(response.body));
@@ -70,6 +72,7 @@ class ProductsProvider with ChangeNotifier {
             'price': product.price,
             'description': product.description,
             'imageUrl': product.imageUrl,
+            'creatorId': userId
           },
         ),
       );

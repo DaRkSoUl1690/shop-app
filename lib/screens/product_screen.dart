@@ -11,9 +11,9 @@ import 'package:shop_app/widgets/grid_product.dart';
 enum FilterOptions { Favorites, All }
 
 class ProductScreen extends StatefulWidget {
-  
+    static const routeName = '/lib/screens/product_screen.dart';
   const ProductScreen({Key? key}) : super(key: key);
-
+      
   @override
   State<ProductScreen> createState() => _ProductScreenState();
 }

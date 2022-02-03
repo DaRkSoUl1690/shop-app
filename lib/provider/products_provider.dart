@@ -6,15 +6,16 @@ import 'package:shop_app/models/product.dart';
 import 'package:http/http.dart' as http;
 
 class ProductsProvider with ChangeNotifier {
-  List<Product> _items = [];
+  List<Product>? _items = [];
 
-  late String authToken;
-  final String userId;
+  final String? authToken;
+  final String? userId;
 
   ProductsProvider(this.authToken, this.userId, this._items);
 
   Future<void> fetchAndSetProducts([bool filterByUser = false]) async {
-    final filterString = filterByUser ? 'orderBy="creatorId"&equalTo="$userId"' : '';
+    final filterString =
+        filterByUser ? 'orderBy="creatorId"&equalTo="$userId"' : '';
 
     var url =
         'https://shopapp-347e8-default-rtdb.firebaseio.com/products.json?auth=$authToken&$filterString';
@@ -51,14 +52,14 @@ class ProductsProvider with ChangeNotifier {
 
   //modified by me
   List<Product> get items {
-    return [..._items];
+    return [..._items!];
   }
 
   List<Product> get favorite {
-    return _items.where((probItem) => probItem.isFavorite).toList();
+    return _items!.where((probItem) => probItem.isFavorite).toList();
   }
 
-  Product findById(String id) => _items.firstWhere((prod) => prod.id == id);
+  Product findById(String id) => _items!.firstWhere((prod) => prod.id == id);
 
   Future<void> addProduct(Product product) async {
     final url =
@@ -84,7 +85,7 @@ class ProductsProvider with ChangeNotifier {
         isFavorite: product.isFavorite,
         imageUrl: product.imageUrl,
       );
-      _items.add(newProduct);
+      _items!.add(newProduct);
       notifyListeners();
     } catch (error) {
       rethrow;
@@ -92,7 +93,7 @@ class ProductsProvider with ChangeNotifier {
   }
 
   Future<void> updateProduct(String id, Product newProduct) async {
-    final prodIndex = _items.indexWhere((prob) => prob.id == id);
+    final prodIndex = _items!.indexWhere((prob) => prob.id == id);
 
     if (prodIndex >= 0) {
       final url =
@@ -104,7 +105,7 @@ class ProductsProvider with ChangeNotifier {
             'description': newProduct.description,
             'imageUrl': newProduct.imageUrl,
           }));
-      _items[prodIndex] = newProduct;
+      _items![prodIndex] = newProduct;
       notifyListeners();
     } else {}
   }
@@ -113,13 +114,13 @@ class ProductsProvider with ChangeNotifier {
     final url =
         'https://shopapp-347e8-default-rtdb.firebaseio.com/products/$id.json?auth=$authToken';
     final existingProductIndex =
-        _items.indexWhere((element) => element.id == id);
-    Product? existingProduct = _items[existingProductIndex];
-    _items.removeAt(existingProductIndex);
+        _items!.indexWhere((element) => element.id == id);
+    Product? existingProduct = _items![existingProductIndex];
+    _items!.removeAt(existingProductIndex);
     notifyListeners();
     final response = await http.delete(Uri.parse(url));
     if (response.statusCode >= 400) {
-      _items.insert(existingProductIndex, existingProduct);
+      _items!.insert(existingProductIndex, existingProduct);
       notifyListeners();
       throw HttpException('Could Not delete Product.');
     }

@@ -5,13 +5,13 @@ import 'package:shop_app/provider/cart.dart';
 import 'package:http/http.dart' as http;
 
 class Orders with ChangeNotifier {
-  List<OrderItems> _orders = [];
-  late final String authToken;
-  final String userId;
-  Orders(this.authToken, this.userId, this._orders);
+  List<OrderItems>? _orders = [];
+  final String ? authToken;
+  final String ? userId;
+   Orders(this.authToken, this.userId, this._orders);
 
   get orders {
-    return [..._orders];
+    return [..._orders!];
   }
 
   Future<void> fetchAndSetOrders() async {
@@ -68,7 +68,7 @@ class Orders with ChangeNotifier {
             'dateTime': timeStamp.toString(),
           }));
 
-      _orders.insert(
+      _orders!.insert(
         0,
         OrderItems(
           id: json.decode(response.body)['name'],

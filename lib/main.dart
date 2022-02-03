@@ -10,6 +10,7 @@ import 'package:shop_app/screens/edit_product_screen.dart';
 import 'package:shop_app/screens/order_screen.dart';
 import 'package:shop_app/screens/product_detail_screen.dart';
 import 'package:shop_app/screens/product_screen.dart';
+import 'package:shop_app/screens/splash_screen.dart';
 import 'package:shop_app/screens/user_product_screen.dart';
 
 void main() {
@@ -28,9 +29,9 @@ class MyApp extends StatelessWidget {
           create: (BuildContext context) => Auth(),
         ),
         ChangeNotifierProxyProvider<Auth, ProductsProvider>(
-          create: (context) => ProductsProvider('', '', []),
+          create: (context) => ProductsProvider(null, null, []),
           update: (context, auth, ProductsProvider? previousProducts) =>
-              ProductsProvider(auth.token!, auth.userId!,
+              ProductsProvider(auth.token, auth.userId,
                   previousProducts == null ? [] : previousProducts.items),
         ),
         ChangeNotifierProvider(
@@ -54,13 +55,23 @@ class MyApp extends StatelessWidget {
                   secondary: Colors.deepOrange,
                 ),
           ),
-          home: auth.isAuth ? const ProductScreen() : const AuthScreen(),
+          home: auth.isAuth
+              ? const ProductScreen()
+              : FutureBuilder(
+                  future: auth.tryAutoLogin(),
+                  builder: (ctx, authsnapshot) =>
+                      authsnapshot.connectionState == ConnectionState.waiting
+                          ? const SplashScreen()
+                          : const AuthScreen(),
+                ),
           routes: {
             ProductDetailScreen.routeName: (ctx) => const ProductDetailScreen(),
+            ProductScreen.routeName: (ctx) => const ProductScreen(),
             CartScreen.routeName: (ctx) => const CartScreen(),
             OrderScreen.routeName: (ctx) => const OrderScreen(),
             UserProductScreen.routeName: (ctx) => const UserProductScreen(),
             EditProductScreen.routeName: (ctx) => const EditProductScreen(),
+            AuthScreen.routeName: (ctx) => const AuthScreen()
           },
         ),
       ),

@@ -1,17 +1,18 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:shop_app/models/orderitem.dart';
-import 'package:shop_app/provider/cart.dart';
 import 'package:http/http.dart' as http;
 
+import '../models/cart_item_model.dart';
+
 class Orders with ChangeNotifier {
-  List<OrderItems>? _orders = [];
-  final String ? authToken;
-  final String ? userId;
-   Orders(this.authToken, this.userId, this._orders);
+  List<OrderItems> _orders = [];
+  final String? authToken;
+  final String? userId;
+  Orders(this.authToken, this.userId, this._orders);
 
   get orders {
-    return [..._orders!];
+    return [..._orders];
   }
 
   Future<void> fetchAndSetOrders() async {
@@ -22,31 +23,30 @@ class Orders with ChangeNotifier {
     if (extractedData == null) {
       notifyListeners();
       return;
-    } else {
-      final List<OrderItems> loadedOrders = [];
-      extractedData.forEach((key, orderData) {
-        loadedOrders.add(
-          OrderItems(
-            id: key,
-            amount: orderData["amount"],
-            dateTime: DateTime.parse(
-              orderData['dateTime'],
-            ),
-            products: (orderData['products'] as List<dynamic>)
-                .map(
-                  (item) => CartItem(
-                      id: item['id'],
-                      title: item['title'],
-                      quantity: item['quantity'],
-                      price: item['price']),
-                )
-                .toList(),
-          ),
-        );
-      });
-      _orders = loadedOrders.reversed.toList();
-      notifyListeners();
     }
+    final List<OrderItems> loadedOrders = [];
+    extractedData.forEach((key, orderData) {
+      loadedOrders.add(
+        OrderItems(
+          id: key,
+          amount: orderData["amount"],
+          dateTime: DateTime.parse(
+            orderData['dateTime'],
+          ),
+          products: (orderData['products'] as List<dynamic>)
+              .map(
+                (item) => CartItem(
+                    id: item['id'],
+                    title: item['title'],
+                    quantity: item['quantity'],
+                    price: item['price']),
+              )
+              .toList(),
+        ),
+      );
+    });
+    _orders = loadedOrders.reversed.toList();
+    notifyListeners();
   }
 
   Future<void> addOrder(List<CartItem> cartproducts, double total) async {
@@ -68,7 +68,7 @@ class Orders with ChangeNotifier {
             'dateTime': timeStamp.toString(),
           }));
 
-      _orders!.insert(
+      _orders.insert(
         0,
         OrderItems(
           id: json.decode(response.body)['name'],

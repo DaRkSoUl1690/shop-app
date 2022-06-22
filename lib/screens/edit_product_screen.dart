@@ -69,9 +69,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
   void dispose() {
     _priceFocusNode.dispose();
     _descFocusNode.dispose();
-    // _imageFocusNode.dispose();
+    _imageUrlController.dispose();
     _imageFocusNode.removeListener(_updateImageUrl);
-
     super.dispose();
   }
 
@@ -91,21 +90,22 @@ class _EditProductScreenState extends State<EditProductScreen> {
       _loading = true;
     });
     if (_editedProduct.id != '') {
+
       await Provider.of<ProductsProvider>(context, listen: false)
-          .updateProduct(_editedProduct.id, _editedProduct);
-      setState(() {
-        _loading = true;
-      });
+          .updateProduct(_editedProduct.id!, _editedProduct);
+      
       Navigator.of(context).pop();
+
     } else {
       try {
         await Provider.of<ProductsProvider>(context, listen: false)
             .addProduct(_editedProduct);
-      } catch (error) {
-        showDialog(
+      }  
+      catch (error) {
+        await showDialog(
           context: context,
           builder: (ctx) => AlertDialog(
-            title: const Text('eroor '),
+            title: const Text('error'),
             content: const Text("error"),
             actions: [
               TextButton(
@@ -125,13 +125,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
             ],
           ),
         );
-      } finally {
-        setState(() {
-          _loading = true;
-        });
-        Navigator.of(context).pop();
       }
     }
+     setState(() {
+      _loading = false;
+    });
+    Navigator.of(context).pop();
   }
 
   @override

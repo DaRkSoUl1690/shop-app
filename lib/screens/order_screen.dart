@@ -15,6 +15,7 @@ class OrderScreen extends StatefulWidget {
 
 class _OrderScreenState extends State<OrderScreen> {
   late Future _ordersFuture;
+
   Future _obtainOrdersFuture() {
     return Provider.of<Orders>(context, listen: false).fetchAndSetOrders();
   }
@@ -27,7 +28,7 @@ class _OrderScreenState extends State<OrderScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // final orderData = Provider.of<Orders>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Your Orders'),

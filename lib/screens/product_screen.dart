@@ -11,9 +11,9 @@ import 'package:shop_app/widgets/grid_product.dart';
 enum FilterOptions { Favorites, All }
 
 class ProductScreen extends StatefulWidget {
-    static const routeName = '/lib/screens/product_screen.dart';
+  static const routeName = '/lib/screens/product_screen.dart';
   const ProductScreen({Key? key}) : super(key: key);
-      
+
   @override
   State<ProductScreen> createState() => _ProductScreenState();
 }
@@ -21,7 +21,7 @@ class ProductScreen extends StatefulWidget {
 class _ProductScreenState extends State<ProductScreen> {
   bool _showfavonly = false;
   var _isInit = true;
-  var _loading = true;
+  var _loading = false;
   @override
   void initState() {
     super.initState();
@@ -33,9 +33,10 @@ class _ProductScreenState extends State<ProductScreen> {
       setState(() {
         _loading = true;
       });
-      Provider.of<ProductsProvider>(context).fetchAndSetProducts();
-      setState(() {
-        _loading = false;
+      Provider.of<ProductsProvider>(context).fetchAndSetProducts().then((_) {
+        setState(() {
+          _loading = false;
+        });
       });
     }
     _isInit = false;
@@ -52,16 +53,17 @@ class _ProductScreenState extends State<ProductScreen> {
             builder: (BuildContext context, value, Widget? ch) => Badge(
               value: value.itemCount.toString(),
               color: Colors.blue,
-              child: ch!,
+              child:ch,
             ),
             child: IconButton(
+                icon: const Icon(Icons.shopping_cart),
               onPressed: () {
                 Navigator.of(context).pushNamed(CartScreen.routeName);
               },
-              icon: const Icon(Icons.shopping_cart),
             ),
           ),
           PopupMenuButton(
+            icon: const Icon(Icons.more_vert),
             onSelected: (FilterOptions selectedValue) {
               setState(() {
                 if (selectedValue == FilterOptions.Favorites) {
@@ -81,7 +83,6 @@ class _ProductScreenState extends State<ProductScreen> {
                 value: FilterOptions.All,
               ),
             ],
-            icon: const Icon(Icons.more_vert),
           ),
         ],
       ),

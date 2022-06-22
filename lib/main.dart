@@ -29,25 +29,25 @@ class MyApp extends StatelessWidget {
           create: (BuildContext context) => Auth(),
         ),
         ChangeNotifierProxyProvider<Auth, ProductsProvider>(
-          create: (context) => ProductsProvider(null, null, []),
+          create: (context) => ProductsProvider('', '', []),
           update: (context, auth, ProductsProvider? previousProducts) =>
-              ProductsProvider(auth.token, auth.userId,
-                  previousProducts == null ? [] : previousProducts.items),
+              ProductsProvider(
+            auth.token,
+            auth.userId,
+            previousProducts?.items, //changes made
+          ),
         ),
         ChangeNotifierProvider(
           create: (BuildContext context) => Cart(),
         ),
         ChangeNotifierProxyProvider<Auth, Orders>(
-          create: (BuildContext context) => Orders('', '', []),
-          update: (context, auth, Orders? previousOrders) => Orders(
-              auth.token!,
-              auth.userId!,
-              previousOrders == null ? [] : previousOrders.orders),
+          create: (BuildContext context) => Orders(null, null, []),
+          update: (context, auth, Orders? previousOrders) =>
+              Orders(auth.token, auth.userId, previousOrders?.orders),
         ),
       ],
       child: Consumer<Auth>(
         builder: (ctx, auth, _) => MaterialApp(
-          title: 'Flutter Demo',
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
             colorScheme: Theme.of(context).colorScheme.copyWith(

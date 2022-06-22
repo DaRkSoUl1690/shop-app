@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
+  import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_app/provider/cart.dart';
-import 'package:shop_app/provider/orders.dart';
+import 'package:shop_app/screens/order_now.dart';
 import 'package:shop_app/widgets/cart_item.dart';
 
 class CartScreen extends StatelessWidget {
@@ -32,7 +32,7 @@ class CartScreen extends StatelessWidget {
                   ),
 
                   // ignore: deprecated_member_use
-                  OrderNow(cart: cart),
+                   OrderNow(key),
                 ],
               ),
             ),
@@ -56,44 +56,3 @@ class CartScreen extends StatelessWidget {
   }
 }
 
-class OrderNow extends StatefulWidget {
-  final Cart cart;
-
-  const OrderNow({Key? key, required this.cart}) : super(key: key);
-
-  @override
-  State<OrderNow> createState() => _OrderNowState();
-}
-
-class _OrderNowState extends State<OrderNow> {
-  var _loading = false;
-  @override
-  Widget build(BuildContext context) {
-    // ignore: deprecated_member_use
-    return FlatButton(
-      onPressed: widget.cart.totalAmount <= 0
-          ? null
-          : () async {
-              try {
-                setState(() {
-                  _loading = true;
-                });
-                await Provider.of<Orders>(context, listen: false)
-                    .addOrder(widget.cart.items.values.toList(),
-                        widget.cart.totalAmount)
-                    .then((_) {
-                  setState(() {
-                    _loading = false;
-                  });
-                });
-              } catch (error) {
-                rethrow;
-              }
-              widget.cart.clear();
-            },
-      child: _loading
-          ? const Center(child: CircularProgressIndicator())
-          : const Text('ORDER NOW'),
-    );
-  }
-}

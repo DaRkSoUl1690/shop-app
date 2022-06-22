@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 
 class Product with ChangeNotifier {
-  final String id;
+  final String? id;
   final String description;
   final String title;
   final double price;
@@ -16,15 +16,15 @@ class Product with ChangeNotifier {
     required this.title,
     required this.price,
     required this.imageUrl,
-   required this.isFavorite,
+    this.isFavorite = false,
   });
 
-  void _setFav(bool newValue) {
+  void _setFavValue(bool newValue) {
     isFavorite = newValue;
     notifyListeners();
   }
 
-  Future<void> toggleFavouriteStatus(String? token,String userId) async {
+  Future<void> toggleFavouriteStatus(String? token, String userId) async {
     final oldStatus = isFavorite;
     isFavorite = !isFavorite;
 
@@ -33,14 +33,15 @@ class Product with ChangeNotifier {
         'https://shopapp-347e8-default-rtdb.firebaseio.com/userFavorites/$userId/$id.json?auth=$token';
     try {
       final response = await http.put(Uri.parse(url),
-          body: json.encode(
-           isFavorite,
-          ));
+        body: json.encode(
+          isFavorite,
+        ),
+      );
       if (response.statusCode >= 400) {
-        _setFav(oldStatus);
+        _setFavValue(oldStatus);
       }
-    } catch (e) {
-      _setFav(oldStatus);
+    } catch (error) {
+      _setFavValue(oldStatus);
     }
   }
 }
